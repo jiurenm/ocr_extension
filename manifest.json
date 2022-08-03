@@ -1,0 +1,25 @@
+{
+    "name": "这是插件",
+    "description": "Build an Extension!",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": ["storage", "scripting","clipboardRead", "clipboardWrite","background", "activeTab"],
+    "host_permissions": [
+        "https://aip.baidubce.com/",
+        "http://i.rcuts.com/update/404"
+    ],
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "识图"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "run_at": "document_idle",
+            "js": ["content.js"]
+        }
+    ]
+}
