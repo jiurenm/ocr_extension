@@ -26,15 +26,19 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     sendResponse("ok")
     getDefaultUrl().then(url => {
         postImgToOCR(url, request.info).then(v => {
-            sendMessage(v)
+            sendMessage(v, request.info)
         })
     })
 })
 
-function sendMessage(message, callback) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, message, function(response) {
-            if (callback) callback(response)
+function sendMessage(message, pic, callback) {
+    chrome.tabs.create({url: chrome.runtime.getURL('./index.html')})
+    setTimeout(() => {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {"pic": pic, "msg": message}, function(response) {
+                if (callback) callback(response)
+            })
         })
-    })
+    }, 1000)
+    
 }
